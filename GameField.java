@@ -19,12 +19,12 @@ public class GameField extends JPanel implements ActionListener {
     private int[] x = new int[ALL_DOTS], y = new int[ALL_DOTS];
     private int dots;
     private int score = 0;
-    private Timer timer;
     private boolean left = false;
     private boolean right = true;
     private boolean up = false;
     private boolean down = false;
     private boolean inGame = true;
+    private boolean isGameOver = false;
 
     public GameField() {
         setBackground(Color.BLACK);
@@ -40,7 +40,7 @@ public class GameField extends JPanel implements ActionListener {
             x[i] = 48 - i * DOT_SIZE;
             y[i] = 48;
         }
-        timer = new Timer(125,this);
+        Timer timer = new Timer(125, this);
         timer.start();
         createApple();
     }
@@ -70,24 +70,30 @@ public class GameField extends JPanel implements ActionListener {
             }
             for (int i = 0; i < SIZE - 32; i += 16) {
                 g.drawImage(bricks, 0, i,this);
-                g.drawImage(bricks, SIZE - 32, i,this);
+                g.drawImage(bricks, SIZE - 32, i, this);
             }
             for (int i = 0; i < SIZE + 1; i += 16) {
-                g.drawImage(bricks, i, SIZE - 32,this);
+                g.drawImage(bricks, i, SIZE - 32, this);
             }
             g.drawImage(apple, appleX, appleY, this);
             g.drawImage(dotHead, x[0], y[0], this);
             for (int i = 1; i < dots; i++) {
                 g.drawImage(dot, x[i], y[i], this);
             }
-        } else {
+        } else if (!isGameOver) {
             String str = "Game Over";
             Font f = new Font("Arial", Font.BOLD, 48);
             g.setColor(Color.WHITE);
             g.setFont(f);
             g.drawString(str, SIZE / 2 - 148, SIZE / 2 - 24);
-            GameOverWindow gow = new GameOverWindow();
-
+            isGameOver = true;
+            new GameOverWindow(e -> {
+                isGameOver = false;
+                inGame = true;
+                x[0] = 300;
+                y[0] = 300;
+                initGame();
+            });
         }
     }
 
@@ -122,7 +128,8 @@ public class GameField extends JPanel implements ActionListener {
     public void checkCollisions() {
         for (int i = dots; i > 0; i--) {
             if (i > 4 && x[i] == x[0] && y[i] == y[0]) {
-                inGame =false;
+                inGame = false;
+                break;
             }
         }
 
@@ -146,10 +153,10 @@ public class GameField extends JPanel implements ActionListener {
             checkApple();
             checkCollisions();
             move();
-
         }
         repaint();
     }
+
     class FieldKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
