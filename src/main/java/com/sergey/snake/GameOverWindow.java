@@ -1,7 +1,5 @@
 package com.sergey.snake;
 
-import com.sergey.snake.GameField;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -22,10 +20,13 @@ public class GameOverWindow extends JFrame {
         jButton.setLayout(new BorderLayout());
         JLabel jLabel1 = new JLabel("  Вы програли, ваш счет: " + GameField.score1);
         JLabel jLabel2 = new JLabel("Нажмите, чтобы начать новую игру.");
+        JLabel jLabel3 = new JLabel("Ваш рекорд: " + GameField.record);
         jLabel1.setFont(font1);
         jLabel2.setFont(font2);
+        jLabel3.setFont(font1);
         jButton.add(BorderLayout.NORTH, jLabel1);
         jButton.add(BorderLayout.CENTER, jLabel2);
+        jButton.add(BorderLayout.SOUTH, jLabel3);
 
         jButton.setBackground(Color.ORANGE);
         jButton.addActionListener(actionListener);

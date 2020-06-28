@@ -1,5 +1,6 @@
 package com.sergey.snake;
 
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -7,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -16,6 +19,7 @@ public class GameField extends JPanel implements ActionListener {
     public static final int SIZE = MainWindow.width;
     public static int score = 0;
     public static int score1 = score;
+    public static int record;
     private final int DOT_SIZE = 16;
     private final int ALL_DOTS = (int) Math.pow((SIZE / DOT_SIZE - 3), 2);
     private Image bricks;
@@ -101,11 +105,29 @@ public class GameField extends JPanel implements ActionListener {
                 g.drawImage(dot, x[i], y[i], this);
             }
 
+            try (FileReader reader = new FileReader("record.txt")) {
+                int c;
+                char cr;
+                StringBuilder recc = new StringBuilder();
+                while ((c = reader.read()) != -1) {
+                    cr = (char) c;
+                    recc.append(cr);
+                }
+                record = Integer.parseInt(recc.toString());
+                System.out.println(record);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (record < score) record = score;
+
             String sc = "Score: " + score;
+            String rec = "Record: " + record;
             Font f = new Font("Arial Narrow", Font.BOLD, 16);
             g.setColor(Color.WHITE);
             g.setFont(f);
             g.drawString(sc, 0, SIZE);
+            g.drawString(rec, SIZE - SIZE / 4, SIZE);
 
         } else if (!isGameOver) {
             String str = "Game Over";
@@ -121,6 +143,14 @@ public class GameField extends JPanel implements ActionListener {
                 x[0] = 320;
                 y[0] = 320;
                 dots = 1;
+                if (score >= record) {
+                    try (FileWriter fw = new FileWriter("record.txt", false)) {
+                        String rec = "" + record;
+                        fw.write(rec);
+                        fw.flush();
+                    } catch (IOException ignored) {
+                    }
+                }
                 score = 0;
             });
         }
