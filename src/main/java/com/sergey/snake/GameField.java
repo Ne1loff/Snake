@@ -1,6 +1,5 @@
 package com.sergey.snake;
 
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +13,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.Random;
+
 
 public class GameField extends JPanel implements ActionListener {
     public static final int SIZE = MainWindow.width;
@@ -57,10 +57,12 @@ public class GameField extends JPanel implements ActionListener {
     }
 
     public void createApple() {
-        appleX = (new Random().nextInt(38) + 1) * DOT_SIZE;
-        appleY = (new Random().nextInt(38) + 1) * DOT_SIZE;
+        appleX = (new Random().nextInt(37) + 1) * DOT_SIZE;
+        appleY = (new Random().nextInt(37) + 1) * DOT_SIZE;
         if (appleY == SIZE - 32 || appleX == SIZE - 32 || appleX == 0 || appleY == 0)
-            createApple();
+            if ((appleX >= x[0] || appleX <= x[dots - 1]) && (appleY >= y[0] || appleY <= y[dots - 1])) {
+                createApple();
+            }
     }
 
     ImageIcon loadImage(String filename) {
@@ -114,7 +116,7 @@ public class GameField extends JPanel implements ActionListener {
                     recc.append(cr);
                 }
                 record = Integer.parseInt(recc.toString());
-                System.out.println(record);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -222,22 +224,19 @@ public class GameField extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
             super.keyPressed(e);
             int key = e.getKeyCode();
-            if (key == KeyEvent.VK_LEFT && ! right) {
+            if (key == KeyEvent.VK_LEFT && !right && x[0] == x[1]) {
                 left = true;
                 up = false;
                 down = false;
-            }
-            else if (key == KeyEvent.VK_RIGHT && ! left) {
+            } else if (key == KeyEvent.VK_RIGHT && !left && x[0] == x[1]) {
                 right = true;
                 up = false;
                 down = false;
-            }
-            else if (key == KeyEvent.VK_UP && ! down) {
+            } else if (key == KeyEvent.VK_UP && !down && y[0] == y[1]) {
                 up = true;
                 right = false;
                 left = false;
-            }
-            else if (key == KeyEvent.VK_DOWN && ! up) {
+            } else if (key == KeyEvent.VK_DOWN && !up && y[0] == y[1]) {
                 down = true;
                 right = false;
                 left = false;
