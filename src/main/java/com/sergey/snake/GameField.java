@@ -57,12 +57,17 @@ public class GameField extends JPanel implements ActionListener {
     }
 
     public void createApple() {
-        appleX = (new Random().nextInt(37) + 1) * DOT_SIZE;
-        appleY = (new Random().nextInt(37) + 1) * DOT_SIZE;
-        if (appleY == SIZE - 32 || appleX == SIZE - 32 || appleX == 0 || appleY == 0)
-            if ((appleX >= x[0] || appleX <= x[dots - 1]) && (appleY >= y[0] || appleY <= y[dots - 1])) {
-                createApple();
+        appleX = (new Random().nextInt(38) + 1) * DOT_SIZE;
+        appleY = (new Random().nextInt(38) + 1) * DOT_SIZE;
+        if (appleY == SIZE - 32 || appleX == SIZE - 32 || appleX == 0 || appleY == 0) {
+            createApple();
+        } else {
+            for (int i = 0; i < dots; i++) {
+                if (appleX == x[i] && appleY == y[i]) {
+                    createApple();
+                }
             }
+        }
     }
 
     ImageIcon loadImage(String filename) {
