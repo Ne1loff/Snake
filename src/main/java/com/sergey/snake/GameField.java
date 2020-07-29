@@ -147,20 +147,20 @@ public class GameField extends JPanel implements ActionListener {
             isGameOver = true;
             score1 = score;
             visibilityController.setVisible(false);
+            if (score >= record) {
+                try (FileWriter fw = new FileWriter("record.txt", false)) {
+                    String rec = "" + record;
+                    fw.write(rec);
+                    fw.flush();
+                } catch (IOException ignored) {
+                }
+            }
             new GameOverWindow(e -> {
                 isGameOver = false;
                 inGame = true;
                 x[0] = 320;
                 y[0] = 320;
                 dots = 1;
-                if (score >= record) {
-                    try (FileWriter fw = new FileWriter("record.txt", false)) {
-                        String rec = "" + record;
-                        fw.write(rec);
-                        fw.flush();
-                    } catch (IOException ignored) {
-                    }
-                }
                 score = 0;
                 visibilityController.setVisible(true);
             });
