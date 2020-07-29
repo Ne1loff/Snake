@@ -36,8 +36,10 @@ public class GameField extends JPanel implements ActionListener {
     private boolean down = false;
     private boolean inGame = true;
     private boolean isGameOver = false;
+    private VisibilityController visibilityController;
 
-    public GameField() {
+    public GameField(VisibilityController visibilityController) {
+        this.visibilityController = visibilityController;
         setBackground(Color.BLACK);
         loadImages();
         initGame();
@@ -137,13 +139,14 @@ public class GameField extends JPanel implements ActionListener {
             g.drawString(rec, SIZE - SIZE / 4, SIZE);
 
         } else if (!isGameOver) {
-            String str = "Game Over";
+            /*String str = "Game Over";
             Font f = new Font("Arial", Font.BOLD, 48);
             g.setColor(Color.WHITE);
             g.setFont(f);
-            g.drawString(str, SIZE / 2 - 148, SIZE / 2 - 24);
+            g.drawString(str, SIZE / 2 - 148, SIZE / 2 - 24);*/
             isGameOver = true;
             score1 = score;
+            visibilityController.setVisible(false);
             new GameOverWindow(e -> {
                 isGameOver = false;
                 inGame = true;
@@ -159,6 +162,7 @@ public class GameField extends JPanel implements ActionListener {
                     }
                 }
                 score = 0;
+                visibilityController.setVisible(true);
             });
         }
     }

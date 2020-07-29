@@ -10,8 +10,8 @@ public class GameOverWindow extends JFrame {
     public GameOverWindow(ActionListener actionListener) {
         setTitle("Game Over");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(500, 500);
-        setLocation(575, 300);
+        setSize(MainWindow.width, MainWindow.height);
+        setLocationRelativeTo(null);
 
         JButton jButton = new JButton();
 
